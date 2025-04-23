@@ -1,0 +1,3 @@
+[submodule "submodule/SIBR_viewers"]
+	path = submodule/SIBR_viewers
+	url = https://github.com/JayFoxRox/SIBR_viewers.git
