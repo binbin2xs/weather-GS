@@ -4,3 +4,6 @@
 [submodule "submodule/diff-gaussian-rasterization"]
 	path = submodule/diff-gaussian-rasterization
 	url = https://github.com/ashawkey/diff-gaussian-rasterization.git
+[submodule "submodule/simple-knn"]
+	path = submodule/simple-knn
+	url = https://github.com/lclichen/simple-knn.git
