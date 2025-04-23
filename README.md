@@ -51,7 +51,7 @@ Multi-GPU reconstruction command
 ```
 bash run_weather_recon.sh
 or
-python run_run_weather_recon_parralel.py --gpus 0-15 --gl_start_time [start_time(YYYY-MM-DD)] --gl_end_time [end_time(YYYY-MM-DD)]
+python run_weather_recon_parralel.py --gpus 0-15 --gl_start_time [start_time(YYYY-MM-DD)] --gl_end_time [end_time(YYYY-MM-DD)]
 ```
 
 
