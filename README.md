@@ -20,6 +20,7 @@ The codes have been tested on python 3.10, CUDA>=11.8. The simplest way to insta
 conda create -n wea3dgs python=3.10
 conda activate wea3dgs
 conda install pytorch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 pytorch-cuda=11.8 -c pytorch -c nvidia
+git clone --recursive 
 pip install -r requirements.txt
 ```
 
