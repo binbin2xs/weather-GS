@@ -31,15 +31,13 @@ pip install -r requirements.txt
 ### Training
 ```bash
 python run_cf3dgs.py --sh_degree 0 --start_time 2020-01-02 --end_time 2020-01-03
-```
 
 bash /cpfs/hantao/CF-3DGS/run_weather_recon.sh
 
 python run_cf3dgs_parralel.py --gpus 0-15 --gl_start_time 2008-01-01 --gl_end_time 2023-12-31
-
-
 ```
 
+
 ## Acknowledgement
-Our render is built upon [3DGS](https://github.com/graphdeco-inria/gaussian-splatting) and [CF3DGS](https://github.com/NVlabs/CF-3DGS/tree/main).
+Our recon is built upon [3DGS](https://github.com/graphdeco-inria/gaussian-splatting) and [CF3DGS](https://github.com/NVlabs/CF-3DGS/tree/main). 
 We thank all the authors for their great repos.
