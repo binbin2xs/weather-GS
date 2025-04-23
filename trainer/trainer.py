@@ -166,7 +166,7 @@ class GaussianTrainer(object):
         self.render_image = OrderedDict()
         self.mono_depth = OrderedDict()
         self.setup_dataset()
-        self.setup_depth_predictor()
+        # self.setup_depth_predictor()
 
     def load_camera(self, data, scale=1.0):
         """
