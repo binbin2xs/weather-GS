@@ -48,7 +48,7 @@ import random
 
 
 class ERA5Dataset(Dataset):
-    def __init__(self, cfg, timestamps, data_root_dir="/project/peilab/dataset/era5_np_float32_part"):
+    def __init__(self, cfg, timestamps, data_root_dir="/dataset/era5_np_float32_part"):
         """
         Args:
             cfg: 配置字典（包含变量名和气压层信息）
@@ -118,7 +118,7 @@ class ERA5Dataset(Dataset):
 
     def get_max_min(self):
     
-        with open('/project/peilab/3DGS/CF-3DGS/era5_stats.json', mode='r') as f:
+        with open('Weather-GS/era5_stats.json', mode='r') as f:
             stats = json.load(f)
         
         # 2. 初始化存储列表
@@ -262,7 +262,7 @@ class GaussianTrainer(object):
                     backbone="vitb_rn50_384",
                     non_negative=True,
                 )
-            state_dict = torch.load('/project/peilab/3DGS/CF-3DGS/submodules/MiDaS/dpt_hybrid_384.pt')
+            state_dict = torch.load('Weather-GS/submodules/MiDaS/dpt_hybrid_384.pt')
             midas.load_state_dict(state_dict)
 
 
