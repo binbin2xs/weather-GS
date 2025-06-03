@@ -23,7 +23,7 @@ from utils.camera_utils import cameraList_from_camInfos, camera_to_JSON
 from scene.dataset_readers import sceneLoadTypeCallbacks, CameraInfo, read_intrinsics_binary
 import glob
 from copy import copy
-import open3d as o3d
+# import open3d as o3d
 from einops import rearrange
 from PIL import Image
 import os
@@ -722,10 +722,10 @@ class GaussianTrainer(object):
                                 intrinsics=self.intrinsic,
                                 uid=idx, is_co3d=True)
         
-        pcd_data = o3d.geometry.PointCloud()
-        pcd_data.points = o3d.utility.Vector3dVector(points)
-        #pcd_data.colors = o3d.utility.Vector3dVector(image_np.reshape(-1, 3))#image_np.shape(721, 1440, 3)
-        pcd_data.estimate_normals()
+        # pcd_data = o3d.geometry.PointCloud()
+        # pcd_data.points = o3d.utility.Vector3dVector(points)
+        # pcd_data.colors = o3d.utility.Vector3dVector(image_np.reshape(-1, 3))#image_np.shape(721, 1440, 3)
+        # pcd_data.estimate_normals()
         
         # if down_sample:
         #     voxel_size = 0.01
@@ -736,8 +736,8 @@ class GaussianTrainer(object):
         #colors = np.asarray(pcd_data.colors, dtype=np.float32)
         colors = image_np.reshape(-1, 150)
         colors = colors.astype(np.float32)
-        points = np.asarray(pcd_data.points, dtype=np.float32)
-        normals = np.asarray(pcd_data.normals, dtype=np.float32)
+        points = points.astype(np.float32)
+        normals = np.zeros((points.shape[0], 3), dtype=np.float32)
         
         colors_points_normals = np.concatenate((colors, points, normals), axis=1)
         
