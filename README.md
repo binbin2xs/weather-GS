@@ -60,7 +60,9 @@ If you want to directly render an image (.npy file) from a point cloud (.ply fil
 python render_weather.py
 ```
 Image Resolution: Adjust at Line 172&173.
+
 Point Cloud Input Path: Set at Line 286.
+
 Rendered Image Output Path: Set at Line 297.
 ## Acknowledgement
 Our recon is built upon [3DGS](https://github.com/graphdeco-inria/gaussian-splatting) and [CF3DGS](https://github.com/NVlabs/CF-3DGS/tree/main). 
