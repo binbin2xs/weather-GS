@@ -54,7 +54,14 @@ or
 python run_weather_recon_parralel.py --gpus 0-15 --gl_start_time [start_time(YYYY-MM-DD)] --gl_end_time [end_time(YYYY-MM-DD)]
 ```
 
-
+### Render
+If you want to directly render an image (.npy file) from a point cloud (.ply file), you can run the following command:
+```
+python render_weather.py
+```
+Image Resolution: Adjust at Line 153.
+Point Cloud Input Path: Set at Line 250.
+Rendered Image Output Path: Set at Line 260.
 ## Acknowledgement
 Our recon is built upon [3DGS](https://github.com/graphdeco-inria/gaussian-splatting) and [CF3DGS](https://github.com/NVlabs/CF-3DGS/tree/main). 
 We thank all the authors for their great repos.
