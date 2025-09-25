@@ -49,12 +49,7 @@ import random
 
 class ERA5Dataset(Dataset):
     def __init__(self, cfg, timestamps, data_root_dir="/dataset/era5_np_float32_part"):
-        """
-        Args:
-            cfg: 配置字典（包含变量名和气压层信息）
-            timestamps: 时间戳列表（如 ["2020-01-01", "2020-01-03"]）
-            data_root_dir: 本地存储 ERA5 .npy 文件的根目录
-        """
+       
         self.cfg = cfg
         self.data_root_dir = data_root_dir
 
@@ -77,21 +72,21 @@ class ERA5Dataset(Dataset):
         return input_data, init_timestamp
 
     def _load_data(self, timestamp):
-        """从本地加载 .npy 文件并返回张量"""
+        
         file_paths = []
         
-        # 生成气压变量文件路径
+        
         for vname in self.cfg['vnames']['pressure']:
             for height in self.cfg['pressure_level']:
                 path = os.path.join(
                     self.data_root_dir,
-                    timestamp[:4],  # 年
-                    timestamp[:10], # 年月日
+                    timestamp[:4],  
+                    timestamp[:10], 
                     f"{timestamp[-8:]}-{vname}-{height}.npy"  
                 )
                 file_paths.append((path, 'pressure'))
 
-        # 生成单层变量文件路径
+        
         for vname in self.cfg['vnames']['single']:
             path = os.path.join(
                 self.data_root_dir,
@@ -102,17 +97,17 @@ class ERA5Dataset(Dataset):
             )
             file_paths.append((path, 'single'))
 
-        # 加载所有文件并拼接
+        
         results = []
         for path, var_type in file_paths:
-            data = np.load(path)  # 从本地加载 .npy 文件
+            data = np.load(path)  
             if var_type == 'single' and 'tp' in path:
-                data = data * 1000  # 降水单位转换（m → mm）
+                data = data * 1000  
             results.append(data)
-        return np.stack(results, axis=-1)  # 沿通道维度拼接
+        return np.stack(results, axis=-1) 
 
     def check_input(self, data):
-        """调整输入尺寸（如果需要）"""
+        
         return F.interpolate(data[None, :, :, :], size=self.cfg['input_shape'], mode='bicubic').squeeze(0)
 
 
@@ -121,13 +116,13 @@ class ERA5Dataset(Dataset):
         with open('Weather-GS/era5_stats.json', mode='r') as f:
             stats = json.load(f)
         
-        # 2. 初始化存储列表
+     
         max_list, min_list = [], []
         
-        # 3. 处理 pressure 变量（带高度层）
+       
         for vname in self.cfg['vnames'].get('pressure', []):
             for level in self.cfg['pressure_level']:
-                # 找到该气压层在 total_levels 中的索引
+                
                 try:
                     idx = self.cfg['total_levels'].index(level)
                     key = f"{vname}_{level}"
@@ -135,15 +130,14 @@ class ERA5Dataset(Dataset):
                         max_list.append(stats[key]["avg_max"])
                         min_list.append(stats[key]["avg_min"])
                 except ValueError:
-                    continue  # 如果气压层不在 total_levels 中则跳过
+                    continue 
         
-        # 4. 处理 single 变量（无高度层）
+  
         for vname in self.cfg['vnames'].get('single', []):
             if vname in stats:
                 max_list.append(stats[vname]["avg_max"])
                 min_list.append(stats[vname]["avg_min"])
         
-        # 5. 转换为 NumPy 数组并返回
         return np.array(max_list, dtype=np.float32), np.array(min_list, dtype=np.float32)
 
 
@@ -741,24 +735,24 @@ class GaussianTrainer(object):
         
         colors_points_normals = np.concatenate((colors, points, normals), axis=1)
         
-        #降采样1
+        #downsampled1
         # grid_data = colors_points_normals.reshape(height, width, -1)  
         # downsampled_data = grid_data[::3, ::3, :]
         # colors_points_normals_downsampled = downsampled_data.reshape(-1, grid_data.shape[-1])
-        #降采样2
+        #downsampled2
         # segment_length = 1440
         # step = 1440*10
         # starts = np.arange(0, colors_points_normals.shape[0] - segment_length + 1, step)
         # slices = [colors_points_normals[start:start + segment_length, :] for start in starts]
         # colors_points_normals_downsampled = np.concatenate(slices)
         # colors_points_normals_downsampled = colors_points_normals_downsampled[::5, :]
-        #降采样3
+        #downsampled3
         # colors_points_normals_downsampled = np.array([colors_points_normals[i:i + 1440] for i in range(0, len(colors_points_normals), 5 * 1440) if i + 1440 <= len(colors_points_normals)])
         # colors_points_normals_downsampled = np.concatenate(colors_points_normals_downsampled)
         # colors_points_normals_downsampled = colors_points_normals_downsampled[::5, :]
-        #降采样4
+        #downsampled4
         #colors_points_normals_downsampled = colors_points_normals[::10, :]
-        #降采样5未按照比例
+        #downsampled5
         # equator_row = 360
         # downsampled_data = []
         # row_indices = np.arange(721)
@@ -776,7 +770,7 @@ class GaussianTrainer(object):
         # grid_data = colors_points_normals.reshape(height, width, -1)  
         # downsampled_data = grid_data[rows, cols, :]
         # colors_points_normals_downsampled = downsampled_data.reshape(-1, grid_data.shape[-1])
-        #降采样6#按照比例从0开始采样并且限制最大间隔20
+        #downsampled6#
         # grid_data = colors_points_normals.reshape(height, width, -1) 
         # equator_row = 360
         # latitudes = np.linspace(-90, 90, 721)  # shape: (721,)
@@ -795,7 +789,7 @@ class GaussianTrainer(object):
 
         # sampled_data = np.concatenate(sampled_data, axis=0) 
         # colors_points_normals_downsampled = sampled_data.reshape(-1, grid_data.shape[-1])
-        #降采样7#按照比例从中间开始采样
+        #downsampled7
         grid_data = colors_points_normals.reshape(height, width, -1)
         center_col = 720
 
@@ -803,8 +797,8 @@ class GaussianTrainer(object):
         cos_lat = np.cos(np.deg2rad(latitudes))
 
         intervals = np.floor(14 / np.maximum(1e-10, cos_lat)).astype(int)
-        intervals = np.maximum(14, intervals)  # 最小间隔
-        # 两极固定间隔
+        intervals = np.maximum(14, intervals)  
+      
         intervals[0] = 1300  
         intervals[-1] = 1300  
         intervals[1] = 1300  
@@ -819,12 +813,11 @@ class GaussianTrainer(object):
             if interval >= 1440:
                 col_indices = [center_col - 1]
             else:
-                # 左侧列（从中间向左，间隔为interval）
+          
                 left_cols = center_col - 1 - np.arange(interval, 1440, interval)
                 left_cols = np.clip(left_cols, 0, None)
                 left_cols = np.unique(left_cols)
 
-                # 右侧列（从中间向右，间隔为interval）
                 right_cols = center_col - 1 + np.arange(interval, 1440, interval)
                 right_cols = np.clip(right_cols, None, grid_data.shape[1] - 1)
                 right_cols = np.unique(right_cols) 
@@ -842,9 +835,9 @@ class GaussianTrainer(object):
         colors_points_normals_downsampled = sampled_data
 
 
-        colors = colors_points_normals_downsampled[:, :150]#通道
-        points = colors_points_normals_downsampled[:, 150:153]#通道
-        normals = colors_points_normals_downsampled[:, 153:]#通道
+        colors = colors_points_normals_downsampled[:, :150]
+        points = colors_points_normals_downsampled[:, 150:153]
+        normals = colors_points_normals_downsampled[:, 153:]
 
         pcd = BasicPointCloud(points, colors, normals)
 
