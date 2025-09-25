@@ -18,8 +18,8 @@ for i in {0..7}; do
     
     CUDA_VISIBLE_DEVICES=$GPU_ID $BASE_CMD --start_time $START_DATE --end_time $END_DATE &
 
-    echo "启动任务 $i: GPU $GPU_ID 处理年份 $CURRENT_YEAR ($START_DATE 到 $END_DATE)"
+    echo " $i: GPU $GPU_ID  $CURRENT_YEAR ($START_DATE  $END_DATE)"
 done
 
 wait
-echo "所有任务已完成"
+echo "All done"
