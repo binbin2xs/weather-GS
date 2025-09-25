@@ -2,7 +2,7 @@
 
 <p align="center">
 
-  <h1 align="center">3D Gaussian Splatting for Weather Recon</h1>
+  <h1 align="center">3D Gaussian Splatting for Weather Recon and Predict</h1>
   <!-- <p align="center">
     <a><strong>Zhibin Wen</strong></a>
     ·
