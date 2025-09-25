@@ -170,7 +170,7 @@ class CFGaussianModel:
 
 def prepare_custom_data():
     width = 1440
-    height = 721#分辨率
+    height = 721
 
     fov = 79.0
     FoVx = fov * math.pi / 180
@@ -283,7 +283,7 @@ def render(gaussians, viewpoint_camera, scaling_modifier=1.0,
 
 
 gaussians = CFGaussianModel(sh_degree=0)
-gaussians.load_ply("2020-12-10 00:00:00.ply")#Gaussian文件路径
+gaussians.load_ply("2020-12-10 00:00:00.ply")
 
 viewpoint_cam = prepare_custom_data()
 
@@ -294,6 +294,6 @@ image = render(gaussians,
             )
         
 image = image.detach().cpu().permute(1, 2, 0).numpy().astype(np.float32)
-np.save('2020-12-10 00:00:00.npy', image)#渲染输出的路径
+np.save('2020-12-10 00:00:00.npy', image)
 
 
