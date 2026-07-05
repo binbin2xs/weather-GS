@@ -2,7 +2,7 @@
 
 <p align="center">
 
-  <h1 align="center">3D Gaussian Splatting for Weather Recon and Predict</h1>
+  <h1 align="center">Generative 3D Gaussian Splatting for Arbitrary-Resolution Atmospheric Downscaling and Forecasting</h1>
   <!-- <p align="center">
     <a><strong>Zhibin Wen</strong></a>
     ·
@@ -38,7 +38,7 @@ Variable: Temperature (t) at pressure level 1.0
 
 Shape: 721×1440
 
-## Run
+## Run （Per-sample 3DGS reconstruction）
 
 ### Training
 
@@ -64,6 +64,47 @@ Image Resolution: Adjust at Line 172&173.
 Point Cloud Input Path: Set at Line 286.
 
 Rendered Image Output Path: Set at Line 297.
+
+
+
+## Run (Neural Network-based generative 3D Gaussian Splatting framework for atmospheric downscaling and forecasting)
+
+### Training
+
+We provide different training scripts for different downscaling and forecasting settings.
+
+#### MPI-ESM 5.625° to ERA5 1.40625°
+
+For the downscaling task from MPI-ESM at 5.625° resolution to ERA5 at 1.40625° resolution, run:
+
+```bash
+torchrun --nproc_per_node=<NUM_GPUS> --master_port=<MASTER_PORT> train_DDP_multiscale_cmip_era5.py
+```
+
+#### ERA5 5.625° to ERA5 2.8125°
+
+For the ERA5-to-ERA5 fixed-resolution downscaling task from 5.625° to 2.8125°, run:
+
+```bash
+torchrun --nproc_per_node=<NUM_GPUS> --master_port=<MASTER_PORT> train_DDP_fixscale_era5_era5.py
+```
+
+#### ERA5 1.40625° to ERA5 0.703125°
+
+For the arbitrary-resolution forecasting task from ERA5 at 1.40625° resolution to ERA5 at 0.703125° resolution, run:
+
+```bash
+torchrun --nproc_per_node=<NUM_GPUS> --master_port=<MASTER_PORT> train_DDP_multiscale.py
+```
+
+## Baselines
+
+For fair comparison, the data preprocessing follows the same setting as [MINet](https://github.com/Teenye/MINet/). The reproduced baseline code can be found in the official [MINet](https://github.com/Teenye/MINet/) repository.
+
+
+
 ## Acknowledgement
 Our recon is built upon [3DGS](https://github.com/graphdeco-inria/gaussian-splatting) and [CF3DGS](https://github.com/NVlabs/CF-3DGS/tree/main). 
 We thank all the authors for their great repos.
+
+
