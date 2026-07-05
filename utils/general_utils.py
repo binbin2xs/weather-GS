@@ -12,6 +12,7 @@ import sys
 from datetime import datetime
 import numpy as np
 import random
+import math
 
 def inverse_sigmoid(x):
     return torch.log(x/(1-x))
@@ -58,6 +59,14 @@ def get_expon_lr_func(
         return delay_rate * log_lerp
 
     return helper
+
+def get_cos_lr_func(lr_init, lr_final, max_steps):
+    def scheduler(step):
+        if step >= max_steps:
+            return lr_final
+        progress = step / max_steps
+        return lr_final + 0.5 * (lr_init - lr_final) * (1 + math.cos(math.pi * progress))
+    return scheduler
 
 def strip_lowerdiag(L):
     uncertainty = torch.zeros((L.shape[0], 6), dtype=torch.float, device="cuda")

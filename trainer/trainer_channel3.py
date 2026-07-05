@@ -753,10 +753,10 @@ class GaussianTrainer(object):
                                 gt_alpha_mask=None, intrinsics=intr_mat, is_co3d=True)
                 
         points = gs_outputs[:, :3]
-        colors = gs_outputs[:, 3:90]
-        opacity = gs_outputs[:, 90:91]
-        scaling = gs_outputs[:, 91:94]
-        rotation = gs_outputs[:, 94:98]
+        colors = gs_outputs[:, 3:6]
+        opacity = gs_outputs[:, 6:7]
+        scaling = gs_outputs[:, 7:10]
+        rotation = gs_outputs[:, 10:14]
         
         pcd = BasicPointCloud(points, colors, opacity, scaling, rotation)
 

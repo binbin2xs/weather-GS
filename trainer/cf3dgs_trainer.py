@@ -130,12 +130,13 @@ class CFGaussianTrainer(GaussianTrainer):
         print(f"optimizing frame {view_idx:03d}")
         optim_opt.iterations = self.single_step
         timestamp = self.timestamps[view_idx]
+        
         year = timestamp[:4]
         gpu_id = int(os.environ["CUDA_VISIBLE_DEVICES"])
         progress_bar = tqdm(range(optim_opt.iterations),
                             desc=f"Training progress{year}",
                             position=gpu_id)
-        self.gs_render.gaussians.training_setup(optim_opt, fix_pos=True,)
+        self.gs_render.gaussians.training_setup(optim_opt, fix_pos=True)
         for iteration in range(1, optim_opt.iterations+1):
             # Update learning rate
             self.gs_render.gaussians.update_learning_rate(iteration)
@@ -151,21 +152,26 @@ class CFGaussianTrainer(GaussianTrainer):
                                           "PSNR": f"{psnr_train:.{2}f}",
                                           "Number points": f"{self.gs_render.gaussians.get_xyz.shape[0]}"})
                 progress_bar.update(10)
+                
+            # if iteration % 500 == 0:
+            #     os.makedirs(f"{result_path}/{optim_opt.iterations}it_{self.gs_render.gaussians.get_xyz.shape[0]}points/{year}", exist_ok=True)
+            #     np.save(f"{result_path}/{optim_opt.iterations}it_{self.gs_render.gaussians.get_xyz.shape[0]}points/{year}/{iteration}_{timestamp}.npy",
+            #             rend_dict["image"].detach().cpu().permute(1, 2, 0).numpy())
             if iteration == optim_opt.iterations:
                 progress_bar.close()
                 
                 os.makedirs(f"{result_path}/{optim_opt.iterations}it_{self.gs_render.gaussians.get_xyz.shape[0]}points/{year}", exist_ok=True)
-                np.save(f"{result_path}/{optim_opt.iterations}it_{self.gs_render.gaussians.get_xyz.shape[0]}points/{year}/{timestamp}.npy",
-                        rend_dict["image"].detach().cpu().permute(1, 2, 0).numpy())              
+                # np.save(f"{result_path}/{optim_opt.iterations}it_{self.gs_render.gaussians.get_xyz.shape[0]}points/{year}/{timestamp}.npy",
+                #         rend_dict["image"].detach().cpu().permute(1, 2, 0).numpy())              
                 self.gs_render.gaussians.save_ply(f"{result_path}/{optim_opt.iterations}it_{self.gs_render.gaussians.get_xyz.shape[0]}points/{year}/{timestamp}.ply")
 
     
     def train_from_progressive(self, ):
         pipe = copy(self.pipe_cfg)
-        self.single_step = 2000
+        self.single_step = 3000
 
         if pipe.expname == "":
-            expname = "recon"
+            expname = "Supp"
         else:
             expname = pipe.expname
         pipe.convert_SHs_python = True
@@ -176,7 +182,7 @@ class CFGaussianTrainer(GaussianTrainer):
         max_frame = self.seq_len
         start_frame = 1
         end_frame = max_frame
-
+    
         num_eppch = 1
         reverse = False
         for fidx in range(0, end_frame):

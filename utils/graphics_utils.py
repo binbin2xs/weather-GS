@@ -15,9 +15,11 @@ from typing import NamedTuple
 
 
 class BasicPointCloud(NamedTuple):
-    points: np.array
-    colors: np.array
-    normals: np.array
+    points: torch.Tensor
+    colors: torch.Tensor
+    opacity: torch.Tensor
+    scaling: torch.Tensor
+    rotation: torch.Tensor
 
     def update(self, points):
         self.points = points

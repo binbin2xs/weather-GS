@@ -13,7 +13,7 @@ from pytorch3d.renderer import PerspectiveCameras
 import pytorch3d
 from utils.image_utils import psnr, colorize
 from utils.loss_utils import l1_loss, ssim
-from scene.cameras import Camera
+from scene.cameras_channel5 import Camera
 from utils.graphics_utils import BasicPointCloud, focal2fov, procrustes, fov2focal
 from scene.gaussian_model import GaussianModel
 from scene import Scene
@@ -710,11 +710,11 @@ class GaussianTrainer(object):
 
         return cam_info, pcd, viewpoint_camera
 
-    def prepare_custom_data(gs_outputs, scale_SR, down_sample=True,
+    def prepare_custom_data(gs_outputs, H_gt, W_gt, down_sample=True,
                             orthogonal=True, pose=None,
                             load_depth=True, **kwargs):
 
-        height, width = int(721*scale_SR), int(1440*scale_SR)
+        height, width = H_gt, W_gt
         fov = 79.0
         FoVx = fov * math.pi / 180
         intr_mat = np.eye(3)
@@ -749,14 +749,14 @@ class GaussianTrainer(object):
         cam_info["R"] = R
         cam_info["t"] = t
 
-        viewpoint_camera = Camera(R, t, FoVx, FoVy, scale_SR,
+        viewpoint_camera = Camera(R, t, FoVx, FoVy, H_gt, W_gt,
                                 gt_alpha_mask=None, intrinsics=intr_mat, is_co3d=True)
                 
         points = gs_outputs[:, :3]
-        colors = gs_outputs[:, 3:90]
-        opacity = gs_outputs[:, 90:91]
-        scaling = gs_outputs[:, 91:94]
-        rotation = gs_outputs[:, 94:98]
+        colors = gs_outputs[:, 3:8]
+        opacity = gs_outputs[:, 8:9]
+        scaling = gs_outputs[:, 9:12]
+        rotation = gs_outputs[:, 12:16]
         
         pcd = BasicPointCloud(points, colors, opacity, scaling, rotation)
 

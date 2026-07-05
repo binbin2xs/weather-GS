@@ -56,6 +56,7 @@ class ModelParams(ParamGroup):
         self._source_path = ""
         self.start_time = ""
         self.end_time = ""
+        self.timestamps = []
         self._model_path = ""
         self._images = "images"
         self._resolution = -1
